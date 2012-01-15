@@ -1,6 +1,30 @@
+To build do make from the directory in which this README resides which will
+ generate executable named "Parser".
 
-1. Line numbers of unreachable statements within uncalled methods are also printed. 
-2. For implemening hashtable open source uthash is used.
-3. To build do make from the directory in which this README resides which will
-   generate executable named "Parser".
+ Overview:
+ A compiler for Java type programming language is implemented in C.
+ The specification of the language is present in the file named
+ Grammar. Lexical, Syntax, Semantic analysis and dead code finder
+ for the programming language is built. The semantic rules are
+ mentioned in the file SemanticRules.Also, the lines which will not
+ be executed at run time e.g. lines following 'return' statement are
+ considered dead.
+
+ Each rule in grammar maps to one struct definition in astType.h. And
+ if a non-terminal has multiple production the struct for that
+ non-terminal is union of all the structs that are used to represent each rule of
+ that non-terminal.
+ Abstract Syntax Tree(AST) nodes are created as a side effect of reduce
+ actions (in SimpleJava.y). TypeCheck.c contains dfsAST
+ which traverses the tree in dfs order and calls a function(passed to
+ dfsAST as a function pointer) at each node of the tree.
+ The symbol table initialization and all the type check rules are
+ implemented by passing different function pointers to this method,
+ dfsAST.
+ SymbolTable is implemented using ,uthash, an open source
+ implementation of generic hash table in Java.
+ To find unreachable code, intra-flow and inter-flow analysis is done by building
+ control flow graphs for each of the methods defined and a call-graphs for the
+ whole program. Than Depth First Search is performed on those graphs to find the
+ unreachable statements.
 
