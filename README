@@ -1,0 +1,6 @@
+
+1. Line numbers of unreachable statements within uncalled methods are also printed. 
+2. For implemening hashtable open source uthash is used.
+3. To build do make from the directory in which this README resides which will
+   generate executable named "Parser".
+

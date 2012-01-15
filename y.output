@@ -1,0 +1,1664 @@
+Grammar
+
+    0 $accept: Goal $end
+
+    1 Goal: ClassDeclaration Goal
+    2     | /* empty */
+
+    3 ClassDeclaration: T_Class Identifier '{' ClassBody '}'
+
+    4 ClassBody: VarDeclaration ClassBody
+    5          | MethodDeclarationList
+
+    6 MethodDeclarationList: MethodDeclaration MethodDeclarationList
+    7                      | /* empty */
+
+    8 MethodDeclaration: Type Identifier '(' Parameters ')' '{' MethodBody '}'
+
+    9 MethodBody: VarDeclaration MethodBody
+   10           | StatementList
+
+   11 StatementList: Statement StatementList
+   12              | /* empty */
+
+   13 VarDeclaration: Type Identifier ';'
+   14               | Identifier Identifier ';'
+
+   15 Parameters: Type Identifier ParameterList
+   16           | /* empty */
+
+   17 ParameterList: ',' Type Identifier ParameterList
+   18              | /* empty */
+
+   19 Type: T_String
+   20     | T_Int
+
+   21 Statement: '{' StatementList '}'
+   22          | T_If '(' Condition ')' Statement T_Else Statement
+   23          | T_While '(' Condition ')' Statement
+   24          | T_Println '(' Expression OptExpression ')' ';'
+   25          | Lvalue '.' Identifier '=' Expression ';'
+   26          | Identifier '=' Expression ';'
+   27          | T_New Identifier '=' Expression ';'
+   28          | T_Return Expression ';'
+   29          | Lvalue '.' Identifier '(' Expression OptExpression ')' ';'
+   30          | Lvalue '.' Identifier '(' ')' ';'
+   31          | Identifier '(' Expression OptExpression ')' ';'
+   32          | Identifier '(' ')' ';'
+
+   33 Condition: Expression '<' Expression
+   34          | Expression '>' Expression
+   35          | Expression T_EQ Expression
+
+   36 Expression: Expression '+' Term
+   37           | Expression '-' Term
+   38           | Term
+
+   39 Term: Term '*' Factor
+   40     | Factor
+
+   41 Factor: T_IntConstant
+   42       | T_StrConstant
+   43       | '(' Expression ')'
+   44       | Lvalue '.' Identifier
+   45       | Lvalue '.' Identifier '(' ')'
+   46       | Lvalue '.' Identifier '(' Expression OptExpression ')'
+   47       | Identifier
+   48       | Identifier '(' Expression OptExpression ')'
+   49       | Identifier '(' ')'
+
+   50 Lvalue: Identifier
+   51       | Lvalue '.' Identifier
+   52       | T_New Identifier
+   53       | T_New Identifier '(' ')'
+
+   54 OptExpression: OptExpression ',' Expression
+   55              | /* empty */
+
+   56 Identifier: T_Id
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 8 22 23 24 29 30 31 32 43 45 46 48 49 53
+')' (41) 8 22 23 24 29 30 31 32 43 45 46 48 49 53
+'*' (42) 39
+'+' (43) 36
+',' (44) 17 54
+'-' (45) 37
+'.' (46) 25 29 30 44 45 46 51
+';' (59) 13 14 24 25 26 27 28 29 30 31 32
+'<' (60) 33
+'=' (61) 25 26 27
+'>' (62) 34
+'{' (123) 3 8 21
+'}' (125) 3 8 21
+error (256)
+T_Class (258) 3
+T_String (259) 19
+T_Int (260) 20
+T_New (261) 27 52 53
+T_If (262) 22
+T_While (263) 23
+T_Println (264) 24
+T_EQ (265) 35
+T_Id (266) 56
+T_IntConstant (267) 41
+T_StrConstant (268) 42
+T_Return (269) 28
+T_Else (270) 22
+
+
+Nonterminals, with rules where they appear
+
+$accept (29)
+    on left: 0
+Goal (30)
+    on left: 1 2, on right: 0 1
+ClassDeclaration (31)
+    on left: 3, on right: 1
+ClassBody (32)
+    on left: 4 5, on right: 3 4
+MethodDeclarationList (33)
+    on left: 6 7, on right: 5 6
+MethodDeclaration (34)
+    on left: 8, on right: 6
+MethodBody (35)
+    on left: 9 10, on right: 8 9
+StatementList (36)
+    on left: 11 12, on right: 10 11 21
+VarDeclaration (37)
+    on left: 13 14, on right: 4 9
+Parameters (38)
+    on left: 15 16, on right: 8
+ParameterList (39)
+    on left: 17 18, on right: 15 17
+Type (40)
+    on left: 19 20, on right: 8 13 15 17
+Statement (41)
+    on left: 21 22 23 24 25 26 27 28 29 30 31 32, on right: 11 22 23
+Condition (42)
+    on left: 33 34 35, on right: 22 23
+Expression (43)
+    on left: 36 37 38, on right: 24 25 26 27 28 29 31 33 34 35 36 37
+    43 46 48 54
+Term (44)
+    on left: 39 40, on right: 36 37 38 39
+Factor (45)
+    on left: 41 42 43 44 45 46 47 48 49, on right: 39 40
+Lvalue (46)
+    on left: 50 51 52 53, on right: 25 29 30 44 45 46 51
+OptExpression (47)
+    on left: 54 55, on right: 24 29 31 46 48 54
+Identifier (48)
+    on left: 56, on right: 3 8 13 14 15 17 25 26 27 29 30 31 32 44
+    45 46 47 48 49 50 51 52 53
+
+
+state 0
+
+    0 $accept: . Goal $end
+
+    T_Class  shift, and go to state 1
+
+    $default  reduce using rule 2 (Goal)
+
+    Goal              go to state 2
+    ClassDeclaration  go to state 3
+
+
+state 1
+
+    3 ClassDeclaration: T_Class . Identifier '{' ClassBody '}'
+
+    T_Id  shift, and go to state 4
+
+    Identifier  go to state 5
+
+
+state 2
+
+    0 $accept: Goal . $end
+
+    $end  shift, and go to state 6
+
+
+state 3
+
+    1 Goal: ClassDeclaration . Goal
+
+    T_Class  shift, and go to state 1
+
+    $default  reduce using rule 2 (Goal)
+
+    Goal              go to state 7
+    ClassDeclaration  go to state 3
+
+
+state 4
+
+   56 Identifier: T_Id .
+
+    $default  reduce using rule 56 (Identifier)
+
+
+state 5
+
+    3 ClassDeclaration: T_Class Identifier . '{' ClassBody '}'
+
+    '{'  shift, and go to state 8
+
+
+state 6
+
+    0 $accept: Goal $end .
+
+    $default  accept
+
+
+state 7
+
+    1 Goal: ClassDeclaration Goal .
+
+    $default  reduce using rule 1 (Goal)
+
+
+state 8
+
+    3 ClassDeclaration: T_Class Identifier '{' . ClassBody '}'
+
+    T_String  shift, and go to state 9
+    T_Int     shift, and go to state 10
+    T_Id      shift, and go to state 4
+
+    $default  reduce using rule 7 (MethodDeclarationList)
+
+    ClassBody              go to state 11
+    MethodDeclarationList  go to state 12
+    MethodDeclaration      go to state 13
+    VarDeclaration         go to state 14
+    Type                   go to state 15
+    Identifier             go to state 16
+
+
+state 9
+
+   19 Type: T_String .
+
+    $default  reduce using rule 19 (Type)
+
+
+state 10
+
+   20 Type: T_Int .
+
+    $default  reduce using rule 20 (Type)
+
+
+state 11
+
+    3 ClassDeclaration: T_Class Identifier '{' ClassBody . '}'
+
+    '}'  shift, and go to state 17
+
+
+state 12
+
+    5 ClassBody: MethodDeclarationList .
+
+    $default  reduce using rule 5 (ClassBody)
+
+
+state 13
+
+    6 MethodDeclarationList: MethodDeclaration . MethodDeclarationList
+
+    T_String  shift, and go to state 9
+    T_Int     shift, and go to state 10
+
+    $default  reduce using rule 7 (MethodDeclarationList)
+
+    MethodDeclarationList  go to state 18
+    MethodDeclaration      go to state 13
+    Type                   go to state 19
+
+
+state 14
+
+    4 ClassBody: VarDeclaration . ClassBody
+
+    T_String  shift, and go to state 9
+    T_Int     shift, and go to state 10
+    T_Id      shift, and go to state 4
+
+    $default  reduce using rule 7 (MethodDeclarationList)
+
+    ClassBody              go to state 20
+    MethodDeclarationList  go to state 12
+    MethodDeclaration      go to state 13
+    VarDeclaration         go to state 14
+    Type                   go to state 15
+    Identifier             go to state 16
+
+
+state 15
+
+    8 MethodDeclaration: Type . Identifier '(' Parameters ')' '{' MethodBody '}'
+   13 VarDeclaration: Type . Identifier ';'
+
+    T_Id  shift, and go to state 4
+
+    Identifier  go to state 21
+
+
+state 16
+
+   14 VarDeclaration: Identifier . Identifier ';'
+
+    T_Id  shift, and go to state 4
+
+    Identifier  go to state 22
+
+
+state 17
+
+    3 ClassDeclaration: T_Class Identifier '{' ClassBody '}' .
+
+    $default  reduce using rule 3 (ClassDeclaration)
+
+
+state 18
+
+    6 MethodDeclarationList: MethodDeclaration MethodDeclarationList .
+
+    $default  reduce using rule 6 (MethodDeclarationList)
+
+
+state 19
+
+    8 MethodDeclaration: Type . Identifier '(' Parameters ')' '{' MethodBody '}'
+
+    T_Id  shift, and go to state 4
+
+    Identifier  go to state 23
+
+
+state 20
+
+    4 ClassBody: VarDeclaration ClassBody .
+
+    $default  reduce using rule 4 (ClassBody)
+
+
+state 21
+
+    8 MethodDeclaration: Type Identifier . '(' Parameters ')' '{' MethodBody '}'
+   13 VarDeclaration: Type Identifier . ';'
+
+    '('  shift, and go to state 24
+    ';'  shift, and go to state 25
+
+
+state 22
+
+   14 VarDeclaration: Identifier Identifier . ';'
+
+    ';'  shift, and go to state 26
+
+
+state 23
+
+    8 MethodDeclaration: Type Identifier . '(' Parameters ')' '{' MethodBody '}'
+
+    '('  shift, and go to state 24
+
+
+state 24
+
+    8 MethodDeclaration: Type Identifier '(' . Parameters ')' '{' MethodBody '}'
+
+    T_String  shift, and go to state 9
+    T_Int     shift, and go to state 10
+
+    $default  reduce using rule 16 (Parameters)
+
+    Parameters  go to state 27
+    Type        go to state 28
+
+
+state 25
+
+   13 VarDeclaration: Type Identifier ';' .
+
+    $default  reduce using rule 13 (VarDeclaration)
+
+
+state 26
+
+   14 VarDeclaration: Identifier Identifier ';' .
+
+    $default  reduce using rule 14 (VarDeclaration)
+
+
+state 27
+
+    8 MethodDeclaration: Type Identifier '(' Parameters . ')' '{' MethodBody '}'
+
+    ')'  shift, and go to state 29
+
+
+state 28
+
+   15 Parameters: Type . Identifier ParameterList
+
+    T_Id  shift, and go to state 4
+
+    Identifier  go to state 30
+
+
+state 29
+
+    8 MethodDeclaration: Type Identifier '(' Parameters ')' . '{' MethodBody '}'
+
+    '{'  shift, and go to state 31
+
+
+state 30
+
+   15 Parameters: Type Identifier . ParameterList
+
+    ','  shift, and go to state 32
+
+    $default  reduce using rule 18 (ParameterList)
+
+    ParameterList  go to state 33
+
+
+state 31
+
+    8 MethodDeclaration: Type Identifier '(' Parameters ')' '{' . MethodBody '}'
+
+    T_String   shift, and go to state 9
+    T_Int      shift, and go to state 10
+    T_New      shift, and go to state 34
+    T_If       shift, and go to state 35
+    T_While    shift, and go to state 36
+    T_Println  shift, and go to state 37
+    T_Id       shift, and go to state 4
+    T_Return   shift, and go to state 38
+    '{'        shift, and go to state 39
+
+    $default  reduce using rule 12 (StatementList)
+
+    MethodBody      go to state 40
+    StatementList   go to state 41
+    VarDeclaration  go to state 42
+    Type            go to state 43
+    Statement       go to state 44
+    Lvalue          go to state 45
+    Identifier      go to state 46
+
+
+state 32
+
+   17 ParameterList: ',' . Type Identifier ParameterList
+
+    T_String  shift, and go to state 9
+    T_Int     shift, and go to state 10
+
+    Type  go to state 47
+
+
+state 33
+
+   15 Parameters: Type Identifier ParameterList .
+
+    $default  reduce using rule 15 (Parameters)
+
+
+state 34
+
+   27 Statement: T_New . Identifier '=' Expression ';'
+   52 Lvalue: T_New . Identifier
+   53       | T_New . Identifier '(' ')'
+
+    T_Id  shift, and go to state 4
+
+    Identifier  go to state 48
+
+
+state 35
+
+   22 Statement: T_If . '(' Condition ')' Statement T_Else Statement
+
+    '('  shift, and go to state 49
+
+
+state 36
+
+   23 Statement: T_While . '(' Condition ')' Statement
+
+    '('  shift, and go to state 50
+
+
+state 37
+
+   24 Statement: T_Println . '(' Expression OptExpression ')' ';'
+
+    '('  shift, and go to state 51
+
+
+state 38
+
+   28 Statement: T_Return . Expression ';'
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+
+    Expression  go to state 56
+    Term        go to state 57
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 39
+
+   21 Statement: '{' . StatementList '}'
+
+    T_New      shift, and go to state 34
+    T_If       shift, and go to state 35
+    T_While    shift, and go to state 36
+    T_Println  shift, and go to state 37
+    T_Id       shift, and go to state 4
+    T_Return   shift, and go to state 38
+    '{'        shift, and go to state 39
+
+    $default  reduce using rule 12 (StatementList)
+
+    StatementList  go to state 61
+    Statement      go to state 44
+    Lvalue         go to state 45
+    Identifier     go to state 62
+
+
+state 40
+
+    8 MethodDeclaration: Type Identifier '(' Parameters ')' '{' MethodBody . '}'
+
+    '}'  shift, and go to state 63
+
+
+state 41
+
+   10 MethodBody: StatementList .
+
+    $default  reduce using rule 10 (MethodBody)
+
+
+state 42
+
+    9 MethodBody: VarDeclaration . MethodBody
+
+    T_String   shift, and go to state 9
+    T_Int      shift, and go to state 10
+    T_New      shift, and go to state 34
+    T_If       shift, and go to state 35
+    T_While    shift, and go to state 36
+    T_Println  shift, and go to state 37
+    T_Id       shift, and go to state 4
+    T_Return   shift, and go to state 38
+    '{'        shift, and go to state 39
+
+    $default  reduce using rule 12 (StatementList)
+
+    MethodBody      go to state 64
+    StatementList   go to state 41
+    VarDeclaration  go to state 42
+    Type            go to state 43
+    Statement       go to state 44
+    Lvalue          go to state 45
+    Identifier      go to state 46
+
+
+state 43
+
+   13 VarDeclaration: Type . Identifier ';'
+
+    T_Id  shift, and go to state 4
+
+    Identifier  go to state 65
+
+
+state 44
+
+   11 StatementList: Statement . StatementList
+
+    T_New      shift, and go to state 34
+    T_If       shift, and go to state 35
+    T_While    shift, and go to state 36
+    T_Println  shift, and go to state 37
+    T_Id       shift, and go to state 4
+    T_Return   shift, and go to state 38
+    '{'        shift, and go to state 39
+
+    $default  reduce using rule 12 (StatementList)
+
+    StatementList  go to state 66
+    Statement      go to state 44
+    Lvalue         go to state 45
+    Identifier     go to state 62
+
+
+state 45
+
+   25 Statement: Lvalue . '.' Identifier '=' Expression ';'
+   29          | Lvalue . '.' Identifier '(' Expression OptExpression ')' ';'
+   30          | Lvalue . '.' Identifier '(' ')' ';'
+   51 Lvalue: Lvalue . '.' Identifier
+
+    '.'  shift, and go to state 67
+
+
+state 46
+
+   14 VarDeclaration: Identifier . Identifier ';'
+   26 Statement: Identifier . '=' Expression ';'
+   31          | Identifier . '(' Expression OptExpression ')' ';'
+   32          | Identifier . '(' ')' ';'
+   50 Lvalue: Identifier .
+
+    T_Id  shift, and go to state 4
+    '('   shift, and go to state 68
+    '='   shift, and go to state 69
+
+    $default  reduce using rule 50 (Lvalue)
+
+    Identifier  go to state 22
+
+
+state 47
+
+   17 ParameterList: ',' Type . Identifier ParameterList
+
+    T_Id  shift, and go to state 4
+
+    Identifier  go to state 70
+
+
+state 48
+
+   27 Statement: T_New Identifier . '=' Expression ';'
+   52 Lvalue: T_New Identifier .
+   53       | T_New Identifier . '(' ')'
+
+    '('  shift, and go to state 71
+    '='  shift, and go to state 72
+
+    $default  reduce using rule 52 (Lvalue)
+
+
+state 49
+
+   22 Statement: T_If '(' . Condition ')' Statement T_Else Statement
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+
+    Condition   go to state 73
+    Expression  go to state 74
+    Term        go to state 57
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 50
+
+   23 Statement: T_While '(' . Condition ')' Statement
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+
+    Condition   go to state 75
+    Expression  go to state 74
+    Term        go to state 57
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 51
+
+   24 Statement: T_Println '(' . Expression OptExpression ')' ';'
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+
+    Expression  go to state 76
+    Term        go to state 57
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 52
+
+   52 Lvalue: T_New . Identifier
+   53       | T_New . Identifier '(' ')'
+
+    T_Id  shift, and go to state 4
+
+    Identifier  go to state 77
+
+
+state 53
+
+   41 Factor: T_IntConstant .
+
+    $default  reduce using rule 41 (Factor)
+
+
+state 54
+
+   42 Factor: T_StrConstant .
+
+    $default  reduce using rule 42 (Factor)
+
+
+state 55
+
+   43 Factor: '(' . Expression ')'
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+
+    Expression  go to state 78
+    Term        go to state 57
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 56
+
+   28 Statement: T_Return Expression . ';'
+   36 Expression: Expression . '+' Term
+   37           | Expression . '-' Term
+
+    ';'  shift, and go to state 79
+    '+'  shift, and go to state 80
+    '-'  shift, and go to state 81
+
+
+state 57
+
+   38 Expression: Term .
+   39 Term: Term . '*' Factor
+
+    '*'  shift, and go to state 82
+
+    $default  reduce using rule 38 (Expression)
+
+
+state 58
+
+   40 Term: Factor .
+
+    $default  reduce using rule 40 (Term)
+
+
+state 59
+
+   44 Factor: Lvalue . '.' Identifier
+   45       | Lvalue . '.' Identifier '(' ')'
+   46       | Lvalue . '.' Identifier '(' Expression OptExpression ')'
+   51 Lvalue: Lvalue . '.' Identifier
+
+    '.'  shift, and go to state 83
+
+
+state 60
+
+   47 Factor: Identifier .
+   48       | Identifier . '(' Expression OptExpression ')'
+   49       | Identifier . '(' ')'
+   50 Lvalue: Identifier .
+
+    '('  shift, and go to state 84
+
+    '.'       reduce using rule 50 (Lvalue)
+    $default  reduce using rule 47 (Factor)
+
+
+state 61
+
+   21 Statement: '{' StatementList . '}'
+
+    '}'  shift, and go to state 85
+
+
+state 62
+
+   26 Statement: Identifier . '=' Expression ';'
+   31          | Identifier . '(' Expression OptExpression ')' ';'
+   32          | Identifier . '(' ')' ';'
+   50 Lvalue: Identifier .
+
+    '('  shift, and go to state 68
+    '='  shift, and go to state 69
+
+    $default  reduce using rule 50 (Lvalue)
+
+
+state 63
+
+    8 MethodDeclaration: Type Identifier '(' Parameters ')' '{' MethodBody '}' .
+
+    $default  reduce using rule 8 (MethodDeclaration)
+
+
+state 64
+
+    9 MethodBody: VarDeclaration MethodBody .
+
+    $default  reduce using rule 9 (MethodBody)
+
+
+state 65
+
+   13 VarDeclaration: Type Identifier . ';'
+
+    ';'  shift, and go to state 25
+
+
+state 66
+
+   11 StatementList: Statement StatementList .
+
+    $default  reduce using rule 11 (StatementList)
+
+
+state 67
+
+   25 Statement: Lvalue '.' . Identifier '=' Expression ';'
+   29          | Lvalue '.' . Identifier '(' Expression OptExpression ')' ';'
+   30          | Lvalue '.' . Identifier '(' ')' ';'
+   51 Lvalue: Lvalue '.' . Identifier
+
+    T_Id  shift, and go to state 4
+
+    Identifier  go to state 86
+
+
+state 68
+
+   31 Statement: Identifier '(' . Expression OptExpression ')' ';'
+   32          | Identifier '(' . ')' ';'
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+    ')'            shift, and go to state 87
+
+    Expression  go to state 88
+    Term        go to state 57
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 69
+
+   26 Statement: Identifier '=' . Expression ';'
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+
+    Expression  go to state 89
+    Term        go to state 57
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 70
+
+   17 ParameterList: ',' Type Identifier . ParameterList
+
+    ','  shift, and go to state 32
+
+    $default  reduce using rule 18 (ParameterList)
+
+    ParameterList  go to state 90
+
+
+state 71
+
+   53 Lvalue: T_New Identifier '(' . ')'
+
+    ')'  shift, and go to state 91
+
+
+state 72
+
+   27 Statement: T_New Identifier '=' . Expression ';'
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+
+    Expression  go to state 92
+    Term        go to state 57
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 73
+
+   22 Statement: T_If '(' Condition . ')' Statement T_Else Statement
+
+    ')'  shift, and go to state 93
+
+
+state 74
+
+   33 Condition: Expression . '<' Expression
+   34          | Expression . '>' Expression
+   35          | Expression . T_EQ Expression
+   36 Expression: Expression . '+' Term
+   37           | Expression . '-' Term
+
+    T_EQ  shift, and go to state 94
+    '<'   shift, and go to state 95
+    '>'   shift, and go to state 96
+    '+'   shift, and go to state 80
+    '-'   shift, and go to state 81
+
+
+state 75
+
+   23 Statement: T_While '(' Condition . ')' Statement
+
+    ')'  shift, and go to state 97
+
+
+state 76
+
+   24 Statement: T_Println '(' Expression . OptExpression ')' ';'
+   36 Expression: Expression . '+' Term
+   37           | Expression . '-' Term
+
+    '+'  shift, and go to state 80
+    '-'  shift, and go to state 81
+
+    $default  reduce using rule 55 (OptExpression)
+
+    OptExpression  go to state 98
+
+
+state 77
+
+   52 Lvalue: T_New Identifier .
+   53       | T_New Identifier . '(' ')'
+
+    '('  shift, and go to state 71
+
+    $default  reduce using rule 52 (Lvalue)
+
+
+state 78
+
+   36 Expression: Expression . '+' Term
+   37           | Expression . '-' Term
+   43 Factor: '(' Expression . ')'
+
+    ')'  shift, and go to state 99
+    '+'  shift, and go to state 80
+    '-'  shift, and go to state 81
+
+
+state 79
+
+   28 Statement: T_Return Expression ';' .
+
+    $default  reduce using rule 28 (Statement)
+
+
+state 80
+
+   36 Expression: Expression '+' . Term
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+
+    Term        go to state 100
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 81
+
+   37 Expression: Expression '-' . Term
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+
+    Term        go to state 101
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 82
+
+   39 Term: Term '*' . Factor
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+
+    Factor      go to state 102
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 83
+
+   44 Factor: Lvalue '.' . Identifier
+   45       | Lvalue '.' . Identifier '(' ')'
+   46       | Lvalue '.' . Identifier '(' Expression OptExpression ')'
+   51 Lvalue: Lvalue '.' . Identifier
+
+    T_Id  shift, and go to state 4
+
+    Identifier  go to state 103
+
+
+state 84
+
+   48 Factor: Identifier '(' . Expression OptExpression ')'
+   49       | Identifier '(' . ')'
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+    ')'            shift, and go to state 104
+
+    Expression  go to state 105
+    Term        go to state 57
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 85
+
+   21 Statement: '{' StatementList '}' .
+
+    $default  reduce using rule 21 (Statement)
+
+
+state 86
+
+   25 Statement: Lvalue '.' Identifier . '=' Expression ';'
+   29          | Lvalue '.' Identifier . '(' Expression OptExpression ')' ';'
+   30          | Lvalue '.' Identifier . '(' ')' ';'
+   51 Lvalue: Lvalue '.' Identifier .
+
+    '('  shift, and go to state 106
+    '='  shift, and go to state 107
+
+    $default  reduce using rule 51 (Lvalue)
+
+
+state 87
+
+   32 Statement: Identifier '(' ')' . ';'
+
+    ';'  shift, and go to state 108
+
+
+state 88
+
+   31 Statement: Identifier '(' Expression . OptExpression ')' ';'
+   36 Expression: Expression . '+' Term
+   37           | Expression . '-' Term
+
+    '+'  shift, and go to state 80
+    '-'  shift, and go to state 81
+
+    $default  reduce using rule 55 (OptExpression)
+
+    OptExpression  go to state 109
+
+
+state 89
+
+   26 Statement: Identifier '=' Expression . ';'
+   36 Expression: Expression . '+' Term
+   37           | Expression . '-' Term
+
+    ';'  shift, and go to state 110
+    '+'  shift, and go to state 80
+    '-'  shift, and go to state 81
+
+
+state 90
+
+   17 ParameterList: ',' Type Identifier ParameterList .
+
+    $default  reduce using rule 17 (ParameterList)
+
+
+state 91
+
+   53 Lvalue: T_New Identifier '(' ')' .
+
+    $default  reduce using rule 53 (Lvalue)
+
+
+state 92
+
+   27 Statement: T_New Identifier '=' Expression . ';'
+   36 Expression: Expression . '+' Term
+   37           | Expression . '-' Term
+
+    ';'  shift, and go to state 111
+    '+'  shift, and go to state 80
+    '-'  shift, and go to state 81
+
+
+state 93
+
+   22 Statement: T_If '(' Condition ')' . Statement T_Else Statement
+
+    T_New      shift, and go to state 34
+    T_If       shift, and go to state 35
+    T_While    shift, and go to state 36
+    T_Println  shift, and go to state 37
+    T_Id       shift, and go to state 4
+    T_Return   shift, and go to state 38
+    '{'        shift, and go to state 39
+
+    Statement   go to state 112
+    Lvalue      go to state 45
+    Identifier  go to state 62
+
+
+state 94
+
+   35 Condition: Expression T_EQ . Expression
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+
+    Expression  go to state 113
+    Term        go to state 57
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 95
+
+   33 Condition: Expression '<' . Expression
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+
+    Expression  go to state 114
+    Term        go to state 57
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 96
+
+   34 Condition: Expression '>' . Expression
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+
+    Expression  go to state 115
+    Term        go to state 57
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 97
+
+   23 Statement: T_While '(' Condition ')' . Statement
+
+    T_New      shift, and go to state 34
+    T_If       shift, and go to state 35
+    T_While    shift, and go to state 36
+    T_Println  shift, and go to state 37
+    T_Id       shift, and go to state 4
+    T_Return   shift, and go to state 38
+    '{'        shift, and go to state 39
+
+    Statement   go to state 116
+    Lvalue      go to state 45
+    Identifier  go to state 62
+
+
+state 98
+
+   24 Statement: T_Println '(' Expression OptExpression . ')' ';'
+   54 OptExpression: OptExpression . ',' Expression
+
+    ')'  shift, and go to state 117
+    ','  shift, and go to state 118
+
+
+state 99
+
+   43 Factor: '(' Expression ')' .
+
+    $default  reduce using rule 43 (Factor)
+
+
+state 100
+
+   36 Expression: Expression '+' Term .
+   39 Term: Term . '*' Factor
+
+    '*'  shift, and go to state 82
+
+    $default  reduce using rule 36 (Expression)
+
+
+state 101
+
+   37 Expression: Expression '-' Term .
+   39 Term: Term . '*' Factor
+
+    '*'  shift, and go to state 82
+
+    $default  reduce using rule 37 (Expression)
+
+
+state 102
+
+   39 Term: Term '*' Factor .
+
+    $default  reduce using rule 39 (Term)
+
+
+state 103
+
+   44 Factor: Lvalue '.' Identifier .
+   45       | Lvalue '.' Identifier . '(' ')'
+   46       | Lvalue '.' Identifier . '(' Expression OptExpression ')'
+   51 Lvalue: Lvalue '.' Identifier .
+
+    '('  shift, and go to state 119
+
+    '.'       reduce using rule 51 (Lvalue)
+    $default  reduce using rule 44 (Factor)
+
+
+state 104
+
+   49 Factor: Identifier '(' ')' .
+
+    $default  reduce using rule 49 (Factor)
+
+
+state 105
+
+   36 Expression: Expression . '+' Term
+   37           | Expression . '-' Term
+   48 Factor: Identifier '(' Expression . OptExpression ')'
+
+    '+'  shift, and go to state 80
+    '-'  shift, and go to state 81
+
+    $default  reduce using rule 55 (OptExpression)
+
+    OptExpression  go to state 120
+
+
+state 106
+
+   29 Statement: Lvalue '.' Identifier '(' . Expression OptExpression ')' ';'
+   30          | Lvalue '.' Identifier '(' . ')' ';'
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+    ')'            shift, and go to state 121
+
+    Expression  go to state 122
+    Term        go to state 57
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 107
+
+   25 Statement: Lvalue '.' Identifier '=' . Expression ';'
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+
+    Expression  go to state 123
+    Term        go to state 57
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 108
+
+   32 Statement: Identifier '(' ')' ';' .
+
+    $default  reduce using rule 32 (Statement)
+
+
+state 109
+
+   31 Statement: Identifier '(' Expression OptExpression . ')' ';'
+   54 OptExpression: OptExpression . ',' Expression
+
+    ')'  shift, and go to state 124
+    ','  shift, and go to state 118
+
+
+state 110
+
+   26 Statement: Identifier '=' Expression ';' .
+
+    $default  reduce using rule 26 (Statement)
+
+
+state 111
+
+   27 Statement: T_New Identifier '=' Expression ';' .
+
+    $default  reduce using rule 27 (Statement)
+
+
+state 112
+
+   22 Statement: T_If '(' Condition ')' Statement . T_Else Statement
+
+    T_Else  shift, and go to state 125
+
+
+state 113
+
+   35 Condition: Expression T_EQ Expression .
+   36 Expression: Expression . '+' Term
+   37           | Expression . '-' Term
+
+    '+'  shift, and go to state 80
+    '-'  shift, and go to state 81
+
+    $default  reduce using rule 35 (Condition)
+
+
+state 114
+
+   33 Condition: Expression '<' Expression .
+   36 Expression: Expression . '+' Term
+   37           | Expression . '-' Term
+
+    '+'  shift, and go to state 80
+    '-'  shift, and go to state 81
+
+    $default  reduce using rule 33 (Condition)
+
+
+state 115
+
+   34 Condition: Expression '>' Expression .
+   36 Expression: Expression . '+' Term
+   37           | Expression . '-' Term
+
+    '+'  shift, and go to state 80
+    '-'  shift, and go to state 81
+
+    $default  reduce using rule 34 (Condition)
+
+
+state 116
+
+   23 Statement: T_While '(' Condition ')' Statement .
+
+    $default  reduce using rule 23 (Statement)
+
+
+state 117
+
+   24 Statement: T_Println '(' Expression OptExpression ')' . ';'
+
+    ';'  shift, and go to state 126
+
+
+state 118
+
+   54 OptExpression: OptExpression ',' . Expression
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+
+    Expression  go to state 127
+    Term        go to state 57
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 119
+
+   45 Factor: Lvalue '.' Identifier '(' . ')'
+   46       | Lvalue '.' Identifier '(' . Expression OptExpression ')'
+
+    T_New          shift, and go to state 52
+    T_Id           shift, and go to state 4
+    T_IntConstant  shift, and go to state 53
+    T_StrConstant  shift, and go to state 54
+    '('            shift, and go to state 55
+    ')'            shift, and go to state 128
+
+    Expression  go to state 129
+    Term        go to state 57
+    Factor      go to state 58
+    Lvalue      go to state 59
+    Identifier  go to state 60
+
+
+state 120
+
+   48 Factor: Identifier '(' Expression OptExpression . ')'
+   54 OptExpression: OptExpression . ',' Expression
+
+    ')'  shift, and go to state 130
+    ','  shift, and go to state 118
+
+
+state 121
+
+   30 Statement: Lvalue '.' Identifier '(' ')' . ';'
+
+    ';'  shift, and go to state 131
+
+
+state 122
+
+   29 Statement: Lvalue '.' Identifier '(' Expression . OptExpression ')' ';'
+   36 Expression: Expression . '+' Term
+   37           | Expression . '-' Term
+
+    '+'  shift, and go to state 80
+    '-'  shift, and go to state 81
+
+    $default  reduce using rule 55 (OptExpression)
+
+    OptExpression  go to state 132
+
+
+state 123
+
+   25 Statement: Lvalue '.' Identifier '=' Expression . ';'
+   36 Expression: Expression . '+' Term
+   37           | Expression . '-' Term
+
+    ';'  shift, and go to state 133
+    '+'  shift, and go to state 80
+    '-'  shift, and go to state 81
+
+
+state 124
+
+   31 Statement: Identifier '(' Expression OptExpression ')' . ';'
+
+    ';'  shift, and go to state 134
+
+
+state 125
+
+   22 Statement: T_If '(' Condition ')' Statement T_Else . Statement
+
+    T_New      shift, and go to state 34
+    T_If       shift, and go to state 35
+    T_While    shift, and go to state 36
+    T_Println  shift, and go to state 37
+    T_Id       shift, and go to state 4
+    T_Return   shift, and go to state 38
+    '{'        shift, and go to state 39
+
+    Statement   go to state 135
+    Lvalue      go to state 45
+    Identifier  go to state 62
+
+
+state 126
+
+   24 Statement: T_Println '(' Expression OptExpression ')' ';' .
+
+    $default  reduce using rule 24 (Statement)
+
+
+state 127
+
+   36 Expression: Expression . '+' Term
+   37           | Expression . '-' Term
+   54 OptExpression: OptExpression ',' Expression .
+
+    '+'  shift, and go to state 80
+    '-'  shift, and go to state 81
+
+    $default  reduce using rule 54 (OptExpression)
+
+
+state 128
+
+   45 Factor: Lvalue '.' Identifier '(' ')' .
+
+    $default  reduce using rule 45 (Factor)
+
+
+state 129
+
+   36 Expression: Expression . '+' Term
+   37           | Expression . '-' Term
+   46 Factor: Lvalue '.' Identifier '(' Expression . OptExpression ')'
+
+    '+'  shift, and go to state 80
+    '-'  shift, and go to state 81
+
+    $default  reduce using rule 55 (OptExpression)
+
+    OptExpression  go to state 136
+
+
+state 130
+
+   48 Factor: Identifier '(' Expression OptExpression ')' .
+
+    $default  reduce using rule 48 (Factor)
+
+
+state 131
+
+   30 Statement: Lvalue '.' Identifier '(' ')' ';' .
+
+    $default  reduce using rule 30 (Statement)
+
+
+state 132
+
+   29 Statement: Lvalue '.' Identifier '(' Expression OptExpression . ')' ';'
+   54 OptExpression: OptExpression . ',' Expression
+
+    ')'  shift, and go to state 137
+    ','  shift, and go to state 118
+
+
+state 133
+
+   25 Statement: Lvalue '.' Identifier '=' Expression ';' .
+
+    $default  reduce using rule 25 (Statement)
+
+
+state 134
+
+   31 Statement: Identifier '(' Expression OptExpression ')' ';' .
+
+    $default  reduce using rule 31 (Statement)
+
+
+state 135
+
+   22 Statement: T_If '(' Condition ')' Statement T_Else Statement .
+
+    $default  reduce using rule 22 (Statement)
+
+
+state 136
+
+   46 Factor: Lvalue '.' Identifier '(' Expression OptExpression . ')'
+   54 OptExpression: OptExpression . ',' Expression
+
+    ')'  shift, and go to state 138
+    ','  shift, and go to state 118
+
+
+state 137
+
+   29 Statement: Lvalue '.' Identifier '(' Expression OptExpression ')' . ';'
+
+    ';'  shift, and go to state 139
+
+
+state 138
+
+   46 Factor: Lvalue '.' Identifier '(' Expression OptExpression ')' .
+
+    $default  reduce using rule 46 (Factor)
+
+
+state 139
+
+   29 Statement: Lvalue '.' Identifier '(' Expression OptExpression ')' ';' .
+
+    $default  reduce using rule 29 (Statement)

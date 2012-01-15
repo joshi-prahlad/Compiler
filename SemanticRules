@@ -1,0 +1,12 @@
+1) For +, -, *, and print operations, only "int" and "string" are permissable types More over, both operands must be of the same type.
+
+2) For any assignment statement, the left-hand side and the right hand side must be of the same type.
+
+3) For any method invocation, the return type must agree with the declared method type.
+
+4) The number of parameters and their types must agree between the method declaration and the method invocation.
+
+5) Every identifier (including class field identifier) which appear in the expressions must be declared in an appropriate scope.
+
+6) Exactly one method named "main" must be declared in one of the classes. Its type must be "int".
+

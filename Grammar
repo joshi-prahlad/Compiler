@@ -1,0 +1,53 @@
+Goal 	::=  (ClassDeclaration )* <EOF>
+
+ClassDeclaration 	::= 	"class" Identifier "{" ( VarDeclaration )* ( MethodDeclaration )* "}"
+
+VarDeclaration 	::= 	Type Identifier  ";"
+               |  Identifier Identifier ";"
+
+MethodDeclaration 	::= 	Type Identifier "(" ( Type Identifier ( "," Type Identifier )* )? ")" "{" ( VarDeclaration )* ( Statement )* "}"
+
+Type 	::= 	"string"
+	| 	"int"
+
+Lvalue  ::=	Identifier
+	|	Lvalue "." Identifier
+	|	"new" Identifier
+	|	"new" Identifier "(" ")"
+
+Statement 	::= 	"{" ( Statement )* "}"
+	| 	"if" "(" Condition ")" Statement "else" Statement
+	| 	"while" "(" Condition ")" Statement
+	| 	"println" "(" Expression ("," Expression)* ")" ";"
+	| 	Lvalue "." Identifier "=" Expression ";"
+	| 	Identifier "=" Expression ";"
+	| 	"new" Identifier "=" Expression ";"
+	| 	return Expression ";"
+	|	Lvalue "." Identifier "(" (Expression ("," Expression )*)? ")" ";"
+	|              Identifier "(" (Expression ("," Expression )*)? ")" ";"
+
+
+Condition    ::=     Expression ("<" | ">" | "==") Expression
+
+Expression 	::= 	Expression ( "+" | "-" | "*" ) Expression
+	| 	Lvalue "." Identifier
+	| 	Identifier
+	| 	<INTEGER_LITERAL>
+                |               <STRING_LITERAL>
+	| 	"(" Expression ")"
+                |               Identifier "(" (Expression ("," Expression )* )? ")" 
+                |               Lvalue "." Identifier "(" (Expression ("," Expression )* )? ")" 
+
+Identifier 	::= 	<IDENTIFIER>
+
+Note: <IDENTIFIER>, <INTEGER_LITERAL> and <String_LITERAL>  are tokens defined below.
+
+<IDENTIFIER> begins with an English letter (case-sensitive) which is followed by zero or more digits or English letters (case-sensitive) except those keywords mentioned in the production rules listed above.
+
+<INTEGER_LITERAL> is an arbitrary nonempty concatenation of decimal digits.
+
+<STRING_LITERAL> is a string of ASCII characters enclosed in a pair of single quotes, e.g. 'abc'.   Between the pair of single quotes there must be no other quote marks.
+
+White spaces include spaces, tabs, comments and carriage returns.
+
+A comment is "//" followed by an arbitrary string ending with a carriage return. 
