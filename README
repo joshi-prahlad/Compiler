@@ -1,7 +1,7 @@
 To build do make from the directory in which this README resides which will
  generate executable named "Parser".
 
- Overview:
+ The Overview:
  A compiler for Java type programming language is implemented in C.
  The specification of the language is present in the file named
  Grammar. Lexical, Syntax, Semantic analysis and dead code finder
